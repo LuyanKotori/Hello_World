@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 此文件称之为实体类的映射文件 -->
+
+<!-- 命名空间,一般情况下,在当前空间中声明的是,空间名称对应的是dao的接口所对应的类地址 -->
+<mapper namespace="com.li.dao.EmpDao">
+	
+	<!-- 
+		resultMap标签表示结果集标签，id表示当前标签的名称，type表示当前结果集返回的对象类型，
+		此类型可以是实体类的类地址，也可以是实体类所对应的别名
+	 -->
+	 <resultMap id="EmpMapper" type="emp" >
+		<!-- 
+			id标签表示当前表中的主键标签，property表示当前实体类中多相对应的属性名称，column表示实体类对应的数据库表中的字段名
+		 -->
+        <id property="e_id" column="e_id"  /><!-- 主键 -->
+        <result property="e_name" column="e_name"  /><!-- 其他列名 -->
+        <result property="e_age" column="e_age"  /><!-- 其他列名 -->
+        <result property="e_time" column="e_time"  /><!-- 其他列名 -->
+        <result property="e_sex" column="e_sex"  /><!-- 其他列名 -->
+         <result property="d_id" column="d_id"  /><!-- 其他列名 -->    
+          <result property="url" column="url"  /><!-- 其他列名 -->    
+             <result property="uploadtime" column="uploadtime"  /><!-- 其他列名 -->    
+         
+         <association property="deptEntity" javaType="dept">
+         		 <id property="d_id" column="d_id"  /><!-- 主键 -->
+       			 <result property="d_name" column="d_name"  /><!-- 其他列名 -->
+         </association>   
+    </resultMap>
+    
+    <!-- 联查 -->
+    <select id="getList" resultMap="EmpMapper">
+    		select * from emp e,dept d where e.d_id=d.d_id
+    </select>
+    
+    <!-- 模糊 -->
+     <select id="getMList" resultMap="EmpMapper" parameterType="emp">
+    		select * from emp e,dept d where e.d_id=d.d_id
+    		<if test="e_sex!=0">
+    			and e_sex like '%${e_sex}%'
+    		</if>
+    		<if test="e_name!='' and e_name!=null">
+    			and e_name like '%${e_name}%'
+    		</if>
+    		<if test="d_id!='' and d_id!=null">
+    			and e.d_id like '%${d_id}%'
+    		</if>
+    </select>
+    <!-- 模糊+分页 -->
+    <select id="getMFList" resultMap="EmpMapper" parameterType="java.util.Map">
+    		select * from emp e,dept d where e.d_id=d.d_id
+    		<if test="e_sex!=0">
+    			and e_sex like '%${e_sex}%'
+    		</if>
+    		<if test="e_name!='' and e_name!=null">
+    			and e_name like '%${e_name}%'
+    		</if>
+    		<if test="d_id!='' and d_id!=null">
+    			and e.d_id like '%${d_id}%'
+    		</if>
+    		limit #{pageT},#{pageSize}
+    </select>
+    
+    <!-- 删除 -->
+    <delete id="delEmp" parameterType="string">
+    		delete from emp where e_id=#{id}
+    </delete>
+    
+    <!-- 批量删除 -->
+     <delete id="pdel" parameterType="string">
+    		delete from emp where e_id in
+    		<!-- foreach表示遍历标签，item表示下标元素别名,随意起，collection参数类型 
+    		    如果传入的是单参数且参数类型是一个List的时候，collection属性值为list
+			如果传入的是单参数且参数类型是一个array数组的时候，collection的属性值为array
+			open表示该语句以什么开始，separator表示在每次进行迭代之间以什么符号作为分隔符，close表示以什么结束
+			e_id in(1,2,4)
+    		-->
+    		<foreach item="id" collection="array" open="(" separator="," close=")">
+    			#{id}
+    		</foreach>
+    </delete>
+    
+    <!-- 新增 -->
+    <insert id="add" parameterType="emp">
+    		insert into emp(e_id,e_name,e_age,e_sex,e_time,url,d_id,uploadtime)
+    		values(#{e_id},#{e_name},#{e_age},#{e_sex},#{e_time},#{url},#{d_id},#{uploadtime})
+    </insert>
+    
+    <!-- 单一查询 -->
+     <select id="getOne" resultMap="EmpMapper" parameterType="string">
+    		select * from emp where e_id=#{id}
+    </select>
+    
+    
+    <!-- 修改 -->
+    <update id="upd" parameterType="emp">
+    		update emp set e_name=#{e_name},e_age=#{e_age},e_sex=#{e_sex},
+    		e_time=#{e_time},url=#{url},d_id=#{d_id},uploadtime=#{uploadtime}
+    		where e_id=#{e_id}
+    </update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

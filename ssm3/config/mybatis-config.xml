@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 
+	此时的mybatis配置文件，功能只是用来写类的别名，
+	那么其他的功能由spring代为管理
+ -->
+<configuration>
+    <typeAliases> 
+       	 	<typeAlias alias="emp" type="com.li.entity.EmpEntity"/>
+       	 	<typeAlias alias="dept" type="com.li.entity.DeptEntity"/>
+    </typeAliases> 	
+    
+     <!-- 配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">   
+          <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+        <!-- true启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+        <!-- false禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->  
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+</configuration>

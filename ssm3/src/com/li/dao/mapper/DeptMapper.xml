@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 此文件称之为实体类的映射文件 -->
+
+<!-- 命名空间,一般情况下,在当前空间中声明的是,空间名称对应的是dao的接口所对应的类地址 -->
+<mapper namespace="com.li.dao.EmpDao">
+	
+	<!-- 
+		resultMap标签表示结果集标签，id表示当前标签的名称，type表示当前结果集返回的对象类型，
+		此类型可以是实体类的类地址，也可以是实体类所对应的别名
+	 -->
+	 <resultMap id="DeptMapper" type="dept" >
+		<!-- 
+			id标签表示当前表中的主键标签，property表示当前实体类中多相对应的属性名称，column表示实体类对应的数据库表中的字段名
+		 -->
+       <id property="d_id" column="d_id"  /><!-- 主键 -->
+        <result property="d_name" column="d_name"  /><!-- 其他列名 -->
+    </resultMap>
+    
+   <!-- 全查dept表 -->
+   <select id="getDeptList" resultMap="DeptMapper">
+   			select * from dept
+   </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
